@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login Form</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      // Signup button click handler
+      $("#signupbtn").click(function () {
+        let email = $("#email").val();
+        let pwd = $("#pwd").val();
+        let utype = $("#usertype").val();
+        let config = {
+          url: "/html-signup",
+          type: "get",
+          data: {
+            Email: email,
+            Pwd: pwd,
+            Utype: utype
+          }
+        };
+        
+        $.ajax(config).done(function (response) {
+          alert(response);
+        }).fail(function (err) {
+          alert(err); // Changed `response` to `err` to handle the error response properly
+        });
+      });
+  
+      // Login button click handler
+      $("#loginbtn").click(function () {
+      let email = $("#Email").val();  // Ensure this matches the ID in your HTML
+      let password = $("#password").val();  // Ensure this matches the ID in your HTML
+      let config = {
+        url: "/login",  // Ensure this matches the server route
+        type: "get",    // This is using a GET method, which is fine for now
+        data: {
+          Email: email,   // Send 'email' as 'Email' in the query string
+          password: password,  // Send 'password' as 'password' in the query string
+        }
+      };
+
+      $.ajax(config).done(function (response) {
+        // Handle login success
+        localStorage.setItem("activeuser", email);  // Store the active user's email in localStorage
+        if(response === "Caretaker Logined") {
+          location.href = "ct-dashboard.html";  // Redirect to Care-Taker dashboard
+        } else if(response === "Citizen Logined") {
+          location.href = "c-dashboard.html";  // Redirect to Citizen dashboard
+        } else {
+          $("#chk").html(response);  // Show any error message returned by the server
+        }
+      }).fail(function (err) {
+        $("#chk").html("An error occurred during login: " + err);  // Display any error in the `#chk` element
+      });
+    });
+  });
+</script>
+  
+  <style>
+    #signup {
+      margin-right: 10px;
+    }
+  .modal-header {
+    background-color: green;
+  }
+  .modal-body {
+    background-color: lightcoral;
+  }
+
+  .custom-card {
+    height: 250px;
+    
+  }
+
+  .card-body {
+    flex-grow: 1;
+    
+  }
+
+  .card-img-top {
+    height: 150px;
+    object-fit: cover;
+  }
+
+  .table{
+    border: 2px black;
+    text-align: center;
+  }
+
+  .add{
+    height: 350px;
+    width: 1520px;
+    border: 2px solid black;
+    float: left;
+    margin-top: 10px;
+    text-align: center;
+    background-image: url(pics/background2.jpg);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  .addres{
+    height: 250px;
+    width: 450px;
+    border: 2px solid black;
+    float: left;
+    margin-top: 10px;
+    margin-left: 45px;
+    text-align: center;
+  }
+
+  #pet{
+    width: 150px;
+    text-align: center;
+    margin-left: 150px;
+    margin-top: 50px;
+  }
+
+iframe {
+  width: 900px;
+  height: 315px;
+}
+
+  </style>
+
+
+</head>
+<body>
+  <nav class="navbar bg-warning border-bottom border-body" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" style="color: black"><h4>Pet care</h4></a>
+      <form class="d-flex" role="search">
+        <button type="button" id="signup" class="btn btn-success" data-toggle="modal" data-target="#signupModal">Signup</button>
+        <button type="button" id="login" class="btn btn-primary" data-toggle="modal" data-target="#loginModal">Login</button>
+      </form>
+    </div>
+  </nav>
+
+  <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Login Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <form>
+            <div class="form-group">
+              <label for="email"><h5>Email address</h5></label>
+              <input type="email" class="form-control" id="Email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+              <label for="password"><h5>Password</h5></label>
+              <input type="password" class="form-control" id="password" placeholder="Enter password" required>
+            </div>
+            <br>
+            <button type="button" id="loginbtn" class="btn btn-primary btn-block">Login</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="signupModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="signupModalLabel">Signup Form</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+           <form>
+            <div class="form-group">
+              <label for="email"><h5>Email address</h5></Email></label>
+              <input type="email" class="form-control" id="email" placeholder="Enter email" required>
+            </div>
+            <div class="form-group">
+              <label for="password"><h5>Password</h5></label>
+              <input type="password" class="form-control" id="pwd" placeholder="Enter password" required>
+            </div>
+            <div class="box">
+              <h6>Select Type</h6>
+              <select name="box" id="usertype">
+                  <option value="Type">Select Type</option>
+                  <option value="Citizen">Citizen</option>
+                  <option value="Caretaker">Caretaker</option>
+              </select>
+          </div>
+            <br>
+            <button type="button" id="signupbtn" class="btn btn-primary btn-block">Signup</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <div class="container">
+    <div class="row">
+      <div class="col-6 col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-primary btn-block">HOME</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-success btn-block">ABOUT US</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-danger btn-block">UPDATES</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="card">
+          <div class="card-body">
+            <button type="button" class="btn btn-warning btn-block">CONTACT US</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="carouselExample" class="carousel slide">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="pics/petbg" class="d-block w-100" alt="...">
+      </div>
+    </div>
+
+
+<div class="add">
+    <div>
+      <div><h2>OUE SERVICE</h2</div>
+    </div>
+      <div>
+        <div class="addres" ><h3>General Pet Care</h3>
+          Are you a new pet parent, or looking for answers to a pet care-related question? Our Pet Care section provides a wealth of health and behavior information to help pet parents provide the best possible care for their furry friends.
+          <button type="button" id="pet" class="btn btn-primary btn-block">Read More</button></div>
+        <div class="addres" ><h3>Dog Care</h3>Are you a dog parent? We’re here to help you keep your pup happy and healthy. Read more for a wide range of dog health and behavior tips that will help you provide the best possible care for your canine companion.
+          <button type="button" id="pet" class="btn btn-dark btn-block">Read More</button></div>
+        <div class="addres" ><h3>Cat Care</h3>Do you have a feline companion? We’ve got you covered. Our ASPCA veterinarians and behaviorists offer up tips, solutions and answers to some of your most frequently asked feline questions to keep your kitty happy and healthy.<button type="button" id="pet" class="btn btn-success btn-block">Read More</button></div>
+      </div>
+</div> 
+
+
+
+</body>
+</html>
